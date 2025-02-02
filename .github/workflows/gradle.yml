@@ -20,6 +20,15 @@ jobs:
           POSTGRES_DB: test_db
         ports:
           - 5432:5432
+      mysql:
+        image: mysql:latest
+        env:
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: test_db
+          MYSQL_USER: user
+          MYSQL_PASSWORD: password
+        ports:
+          - 3306:3306
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
@@ -29,6 +38,17 @@ jobs:
         with:
           distribution: 'temurin'
           java-version: '11'
+
+      - name: Install Chrome
+        run: |
+          sudo apt update
+          sudo apt install -y google-chrome-stable
+
+      - name: Install ChromeDriver
+        run: |
+          CHROME_VERSION=$(google-chrome --version | awk '{print $3}' | cut -d. -f1)
+          sudo wget -q -O /usr/local/bin/chromedriver https://chromedriver.storage.googleapis.com/${CHROME_VERSION}.0/chromedriver_linux64.zip
+          sudo chmod +x /usr/local/bin/chromedriver
 
       - name: Grant execute permission for Gradle
         run: chmod +x gradlew
