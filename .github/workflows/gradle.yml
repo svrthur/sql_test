@@ -46,9 +46,8 @@ jobs:
 
       - name: Install ChromeDriver
         run: |
-          CHROME_VERSION=$(google-chrome --version | awk '{print $3}' | cut -d. -f1)
-          sudo wget -q -O /usr/local/bin/chromedriver https://chromedriver.storage.googleapis.com/${CHROME_VERSION}.0/chromedriver_linux64.zip
-          sudo chmod +x /usr/local/bin/chromedriver
+          sudo apt update
+          sudo apt install -y chromedriver
 
       - name: Grant execute permission for Gradle
         run: chmod +x gradlew
